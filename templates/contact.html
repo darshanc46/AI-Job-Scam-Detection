@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld AI</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="detect" style="max-width: 700px;">
+        <h2 style="text-align: center; color: var(--text);">Contact JobShyld AI Team</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Have questions, feedback, or need help verifying a suspicious job offer? Reach out to us!</p>
+
+        <div class="cards" style="margin-bottom: 30px;">
+            <div class="card">
+                <i class="fa-solid fa-envelope"></i>
+                <h3>Email Support</h3>
+                <p>support@jobshyldai.com</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-location-dot"></i>
+                <h3>Location</h3>
+                <p>Bangalore, Karnataka, India</p>
+            </div>
+        </div>
+
+        <form onsubmit="alert('Thank you for contacting JobShyld AI! We will get back to you shortly.'); return false;">
+            <div style="margin-bottom: 15px;">
+                <input type="text" placeholder="Your Full Name" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <input type="email" placeholder="Your Email Address" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <input type="text" placeholder="Subject" required>
+            </div>
+            <textarea placeholder="Write your message here..." style="height: 140px; margin-top: 0;" required></textarea>
+            <button type="submit" style="margin-top: 15px;">
+                <i class="fa-solid fa-paper-plane"></i> Send Message
+            </button>
+        </form>
+    </div>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+</body>
+</html>

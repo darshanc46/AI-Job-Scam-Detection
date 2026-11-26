@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Scan History | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+
+    <nav class="navbar navbar-glass">
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld <span class="highlight">AI</span></a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history" class="active">History</a></li>
+                {% if is_admin %}
+                    <li><a href="/admin/users">Admin Panel</a></li>
+                {% endif %}
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="container mt-4 mb-5">
+        <div class="top-btn">
+            <a href="/detect"><i class="fa-solid fa-magnifying-glass"></i> New Scan</a>
+            <a href="/dashboard"><i class="fa-solid fa-house"></i> Dashboard</a>
+        </div>
+
+        <h2 style="text-align:center; color:var(--text); margin-bottom: 20px;">
+            <i class="fa-solid fa-clock-rotate-left text-primary"></i> Candidate Scan History &amp; Audit Logs
+        </h2>
+
+        <!-- Search & Filter Bar + Compare Trigger -->
+        <div class="glass-card mb-4">
+            <form action="/history" method="GET" class="display-flex flex-wrap gap-2 justify-between align-center">
+                <div class="display-flex flex-wrap gap-2 flex-grow">
+                    <input type="text" name="q" value="{{ search_q or '' }}" placeholder="🔍 Search Company, Role, or Text..." class="form-control" style="max-width:300px;">
+                    <select name="status" class="form-control" style="max-width:180px;">
+                        <option value="">All Statuses</option>
+                        <option value="Safe" {% if status_filter == 'Safe' %}selected{% endif %}>🟢 Safe Only</option>
+                        <option value="Scam" {% if status_filter == 'Scam' %}selected{% endif %}>🔴 Scam Only</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-filter"></i> Apply Filter</button>
+                    {% if search_q or status_filter %}
+                        <a href="/history" class="btn btn-secondary btn-sm">Clear</a>
+                    {% endif %}
+                </div>
+                <div class="display-flex gap-2">
+                    <button type="button" onclick="triggerCompare()" class="btn btn-warning btn-sm"><i class="fa-solid fa-code-compare"></i> Compare Selected (2)</button>
+                    <a href="/history/export" class="btn btn-success btn-sm"><i class="fa-solid fa-file-csv"></i> Export CSV</a>
+                    <a href="/history/export_excel" class="btn btn-info btn-sm"><i class="fa-solid fa-file-excel"></i> Export Excel</a>
+                </div>
+            </form>
+        </div>
+
+        {% if history %}
+            <div class="glass-card">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th style="width:40px;">Select</th>
+                            <th>Date &amp; Time</th>
+                            <th>Company</th>
+                            <th>Job Role</th>
+                            <th>Scam Category</th>
+                            <th>Status</th>
+                            <th>Risk %</th>
+                            <th>Audit Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in history %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="compare-checkbox" value="{{ item.id }}" onchange="limitCompareSelection(this)">
+                                </td>
+                                <td>{{ item.date }}</td>
+                                <td><b>{{ item.company or 'N/A' }}</b></td>
+                                <td>{{ item.role }}</td>
+                                <td><span class="badge badge-info">{{ item.scam_category or 'General' }}</span></td>
+                                <td>
+                                    {% if item.prediction == "Scam" %}
+                                        <span class="badge badge-danger"><i class="fa-solid fa-triangle-exclamation"></i> Scam</span>
+                                    {% else %}
+                                        <span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Safe</span>
+                                    {% endif %}
+                                </td>
+                                <td><b>{{ item.risk_score }}%</b></td>
+                                <td>
+                                    <a href="/history/export_pdf/{{ item.id }}" class="btn btn-sm btn-outline">
+                                        <i class="fa-solid fa-file-pdf"></i> PDF
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="glass-card text-center p-5">
+                <i class="fa-solid fa-inbox text-muted mb-3" style="font-size: 40px; display: block;"></i>
+                <p class="text-muted">No scan history matches your search query.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | MCA Capstone Project</p>
+    </footer>
+
+    <script>
+        function limitCompareSelection(checkbox) {
+            const checked = document.querySelectorAll(".compare-checkbox:checked");
+            if (checked.length > 2) {
+                checkbox.checked = false;
+                alert("You can select a maximum of 2 scans to compare side-by-side.");
+            }
+        }
+
+        function triggerCompare() {
+            const checked = document.querySelectorAll(".compare-checkbox:checked");
+            if (checked.length !== 2) {
+                alert("Please select exactly 2 scan checkboxes to compare them side-by-side.");
+                return;
+            }
+            const scan1 = checked[0].value;
+            const scan2 = checked[1].value;
+            window.location.href = `/compare?scan1=${scan1}&scan2=${scan2}`;
+        }
+    </script>
+    {% include 'chatbot.html' %}
+</body>
+</html>

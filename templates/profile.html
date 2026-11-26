@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld AI</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                {% if is_admin %}
+                    <li><a href="/admin/users">Admin Panel</a></li>
+                {% endif %}
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="container" style="max-width: 600px;">
+        <div style="text-align: center; margin-bottom: 25px;">
+            <i class="fa-solid fa-circle-user" style="font-size: 80px; color: var(--accent);"></i>
+            <h2 style="margin-top: 15px; color: var(--text);">User Profile</h2>
+            <p style="color: var(--text-muted);">Registered Account Details</p>
+        </div>
+
+        <div style="background: var(--bg-deep); padding: 25px; border-radius: 14px; border: 1px solid var(--border);">
+            <div style="margin-bottom: 18px;">
+                <label style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Full Name</label>
+                <div style="font-size: 18px; font-weight: bold; color: var(--text);">{{ user.username }}</div>
+            </div>
+            <div style="margin-bottom: 18px;">
+                <label style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Email Address</label>
+                <div style="font-size: 18px; font-weight: bold; color: var(--text);">{{ email }}</div>
+            </div>
+            <div style="margin-bottom: 18px;">
+                <label style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Account Role</label>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text);">{{ role }}</div>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label style="color: var(--text-muted); font-size: 13px; display: block; margin-bottom: 4px;">Joined</label>
+                <div style="font-size: 16px; color: var(--text);">{{ created_at }}</div>
+            </div>
+        </div>
+
+        <div class="buttons" style="margin-top: 30px;">
+            <a href="/detect" class="btn">
+                <i class="fa-solid fa-magnifying-glass"></i> New Job Scan
+            </a>
+            <a href="/history" class="btn btn-secondary">
+                <i class="fa-solid fa-clock-rotate-left"></i> View History
+            </a>
+            <a href="/logout" class="btn btn-secondary" style="border-color: var(--danger) !important; color: var(--danger) !important;">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+</body>
+</html>

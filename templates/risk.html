@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Analysis | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld AI</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <section class="section">
+        <h1 class="title">AI Risk Analysis Metrics</h1>
+
+        <div class="cards">
+            <div class="card">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+                <h3>Financial Demands (Weight: 35%)</h3>
+                <p>Detects mandatory payments, wire transfers, crypto deposits, and registration fee requests.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-comments"></i>
+                <h3>Channel Risk (Weight: 20%)</h3>
+                <p>Flags non-professional messaging apps like Telegram, WhatsApp, and Signal used for hiring.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-at"></i>
+                <h3>Email Domain Risk (Weight: 15%)</h3>
+                <p>Identifies corporate recruiter emails using generic webmail domains (@gmail.com, @yahoo.com).</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Salary Anomaly (Weight: 15%)</h3>
+                <p>Analyzes disproportionately high salaries relative to required experience level.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="/detect" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Analyze Job Posting</a>
+        </div>
+    </section>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+</body>
+</html>

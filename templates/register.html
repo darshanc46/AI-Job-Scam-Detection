@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="auth-page">
+
+    <div class="register-box">
+        <div style="text-align:center; font-size:56px; color:var(--accent); margin-bottom:12px;">
+            <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <h2>Create Free Account</h2>
+        <p style="text-align:center; color:var(--text-muted); margin-bottom:28px; font-size:14px;">
+            Protect your job search with AI Job Scam Detection
+        </p>
+
+        <form action="/register" method="POST" onsubmit="return validateForm()">
+            <div style="margin-bottom:16px;">
+                <input type="text" name="username" placeholder="Full Name" required>
+            </div>
+            <div style="margin-bottom:16px;">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="password-box" style="margin-bottom:16px;">
+                <input type="password" id="password" name="password" placeholder="Password" required onkeyup="checkStrength()">
+                <i class="fa-solid fa-eye" onclick="togglePass('password')"></i>
+                <div id="strength" style="font-size:12px; margin-top:6px; font-weight:700;"></div>
+            </div>
+            <div class="password-box" style="margin-bottom:16px;">
+                <input type="password" id="confirm" placeholder="Confirm Password" required>
+                <i class="fa-solid fa-eye" onclick="togglePass('confirm')"></i>
+            </div>
+
+            <!-- Terms & Conditions Checkbox -->
+            <div class="terms-row" style="margin-bottom:24px;">
+                <input type="checkbox" id="terms" required onchange="toggleSubmitBtn()">
+                <label for="terms">
+                    I agree to the <a onclick="openModal()">Terms &amp; Conditions</a> and understand that the AI's prediction is advisory and not a guarantee of legitimacy.
+                </label>
+            </div>
+
+            <button type="submit" id="submitBtn" disabled>
+                <i class="fa-solid fa-user-check"></i> Register Account
+            </button>
+        </form>
+
+        <div style="text-align:center; margin-top:28px; font-size:14px; color:var(--text-body);">
+            Already have an account? <a href="/login" style="color:var(--accent); font-weight:600;">Login Here</a>
+        </div>
+        <div style="text-align:center; margin-top:16px; font-size:14px;">
+            <a href="/" style="color:var(--text-muted); transition:color 0.2s;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- T&C Modal -->
+    <div class="modal-overlay" id="tcModal">
+        <div class="modal-box">
+            <h2>Terms &amp; Conditions</h2>
+            <p>Welcome to JobShyld AI. By using this service, you agree to the following terms:</p>
+            <ul>
+                <li><b>Advisory Only:</b> JobShyld AI provides probability scores based on Natural Language Processing (NLP). The tool does not guarantee 100% accuracy.</li>
+                <li><b>Final Responsibility:</b> Users should perform independent background checks on recruiters and companies. Do not solely rely on this AI.</li>
+                <li><b>Data Privacy:</b> We do not store sensitive job descriptions permanently. Scans are saved to your local history temporarily for reference.</li>
+                <li><b>No Financial Advice:</b> We are not liable for any financial losses or damages incurred through fraudulent job interactions.</li>
+            </ul>
+            <p>If you suspect an ongoing scam, please immediately cease communication with the recruiter and report them to relevant cybercrime authorities.</p>
+            <button class="btn modal-close" onclick="closeModal()">I Understand</button>
+        </div>
+    </div>
+
+    <script>
+        function validateForm(){
+            let pass = document.getElementById("password").value;
+            let confirm = document.getElementById("confirm").value;
+            let terms = document.getElementById("terms").checked;
+            
+            if(pass !== confirm){
+                alert("Passwords do not match!");
+                return false;
+            }
+            if(!terms){
+                alert("Please agree to the Terms & Conditions.");
+                return false;
+            }
+            return true;
+        }
+
+        function checkStrength(){
+            let pass = document.getElementById("password").value;
+            let text = document.getElementById("strength");
+            if(pass.length === 0){
+                text.innerHTML = "";
+            } else if(pass.length < 6){
+                text.innerHTML = "🔴 Weak Password";
+                text.style.color = "var(--danger)";
+            } else if(pass.length < 10){
+                text.innerHTML = "🟡 Medium Password";
+                text.style.color = "#fbbf24";
+            } else {
+                text.innerHTML = "🟢 Strong Password";
+                text.style.color = "var(--success)";
+            }
+        }
+
+        function togglePass(id){
+            let input = document.getElementById(id);
+            input.type = input.type === "password" ? "text" : "password";
+        }
+
+        function toggleSubmitBtn(){
+            let terms = document.getElementById("terms").checked;
+            let btn = document.getElementById("submitBtn");
+            btn.disabled = !terms;
+        }
+
+        function openModal(){
+            document.getElementById("tcModal").classList.add("open");
+        }
+        function closeModal(){
+            document.getElementById("tcModal").classList.remove("open");
+        }
+    </script>
+</body>
+</html>

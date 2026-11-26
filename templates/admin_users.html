@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Panel | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+
+    <nav class="navbar navbar-glass">
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld <span class="highlight">AI</span> Admin</a>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/detect">Detect</a></li>
+            <li><a href="/history">History</a></li>
+            <li><a href="/admin/users" class="active">Admin Panel</a></li>
+            <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-4 mb-5" style="max-width:1150px;">
+        <div class="glass-card mb-4 display-flex justify-between align-center flex-wrap gap-2">
+            <div>
+                <h2>🛠️ Admin Security &amp; User Control Panel</h2>
+                <p class="text-muted text-sm">System-wide user management, corporate blacklist control, and security audit logs.</p>
+            </div>
+            <div class="display-flex gap-2">
+                <a href="/admin/export_excel" class="btn btn-success btn-sm"><i class="fa-solid fa-file-excel"></i> Export Excel Audit (.xls)</a>
+                <a href="/admin/export" class="btn btn-primary btn-sm"><i class="fa-solid fa-file-csv"></i> Export CSV</a>
+                <form action="/admin/clear_history" method="POST" onsubmit="return confirm('Clear all system scan history?');" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Clear All Scan History</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- TELEMETRY METRICS -->
+        <div class="dash-grid mb-4">
+            <div class="dash-metric glass-card">
+                <div class="metric-icon"><i class="fa-solid fa-users text-primary"></i></div>
+                <div class="metric-value">{{ total_users }}</div>
+                <div class="metric-label">Total Users</div>
+            </div>
+            <div class="dash-metric glass-card">
+                <div class="metric-icon"><i class="fa-solid fa-server text-primary"></i></div>
+                <div class="metric-value">{{ total_system_scans }}</div>
+                <div class="metric-label">Total System Scans</div>
+            </div>
+            <div class="dash-metric glass-card">
+                <div class="metric-icon"><i class="fa-solid fa-shield-cat text-danger"></i></div>
+                <div class="metric-value text-danger">{{ high_risk_count }}</div>
+                <div class="metric-label">High-Risk Threats</div>
+            </div>
+        </div>
+
+        <!-- USER LIST TABLE -->
+        <div class="glass-card mb-4">
+            <h3>👥 Registered System Candidates</h3>
+            <div class="table-responsive mt-3">
+                <table id="admin-user-table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Email Address</th>
+                            <th>Registered At</th>
+                            <th>Total Scans</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.user_id }}</td>
+                            <td><b>{{ user.username }}</b></td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.created_at }}</td>
+                            <td><b>{{ user.scan_count }}</b></td>
+                            <td>
+                                {% if user.role == 'Admin' %}
+                                    <span class="badge badge-info"><i class="fa-solid fa-user-shield"></i> Admin</span>
+                                {% else %}
+                                    <span class="badge badge-secondary"><i class="fa-solid fa-user"></i> Candidate</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BLACKLIST MANAGEMENT -->
+        <div class="glass-card mb-4">
+            <h3>🚫 Corporate Fraud Blacklist Registry</h3>
+            <form action="/admin/blacklist/add" method="POST" class="display-flex gap-2 mt-3 mb-3">
+                <input type="text" name="domain_or_email" placeholder="Domain or email to blacklist (e.g. fake-careers-recruiter.com)" class="form-control" required style="max-width:400px;">
+                <input type="text" name="scam_type" placeholder="Scam Category (e.g. Phishing / Fee Fraud)" class="form-control" style="max-width:300px;">
+                <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-plus"></i> Add to Blacklist</button>
+            </form>
+
+            <table class="mt-2">
+                <thead>
+                    <tr>
+                        <th>Domain / Email</th>
+                        <th>Scam Category</th>
+                        <th>Added By</th>
+                        <th>Date Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in blacklists %}
+                    <tr>
+                        <td><strong class="text-danger">{{ b.domain_or_email }}</strong></td>
+                        <td>{{ b.scam_type }}</td>
+                        <td>{{ b.added_by }}</td>
+                        <td>{{ b.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4" class="text-muted text-center">No blacklist entries recorded.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CANDIDATE FEEDBACK REVIEW QUEUE -->
+        <div class="glass-card mb-4">
+            <h3>💬 Crowdsourced Candidate Feedback Review Queue</h3>
+            <p class="text-muted text-sm mt-1">Review candidate feedback submissions and reported ground-truth statuses for AI model retraining.</p>
+            <table class="mt-3">
+                <thead>
+                    <tr>
+                        <th>Date &amp; Time</th>
+                        <th>Scan ID</th>
+                        <th>User</th>
+                        <th>Reported Actual Status</th>
+                        <th>Candidate Comments</th>
+                        <th>Review Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fb in feedbacks %}
+                    <tr>
+                        <td>{{ fb.created_at.strftime('%Y-%m-%d %H:%M') if fb.created_at else 'N/A' }}</td>
+                        <td><b>#{{ fb.scan_id }}</b></td>
+                        <td>{{ fb.user.username if fb.user else 'User #' ~ fb.user_id }}</td>
+                        <td><span class="badge badge-warning">{{ fb.reported_label }}</span></td>
+                        <td>{{ fb.user_comment or 'No comments provided.' }}</td>
+                        <td><span class="badge badge-info">{{ fb.status }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" class="text-muted text-center">No feedback submissions recorded yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- AUDIT LOGS -->
+        <div class="glass-card mb-4">
+            <h3>🛡️ Security Audit Logs</h3>
+            <table class="mt-3">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Event Type</th>
+                        <th>User ID</th>
+                        <th>IP Address</th>
+                        <th>Event Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in audit_logs %}
+                    <tr>
+                        <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td><span class="badge badge-info">{{ log.event_type }}</span></td>
+                        <td>{{ log.user_id or 'System' }}</td>
+                        <td>{{ log.ip_address }}</td>
+                        <td>{{ log.details }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="text-muted text-center">No audit logs recorded.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | MCA Capstone Project</p>
+    </footer>
+</body>
+</html>

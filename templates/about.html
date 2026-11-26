@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld AI</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <section class="section">
+        <h1 class="title">About JobShyld AI</h1>
+
+        <div class="cards">
+            <div class="card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Project Overview</h3>
+                <p>JobShyld AI is an AI-powered Job &amp; Internship Scam Detection Platform that helps students identify fake recruitment offers using NLP and Machine Learning classification.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-bullseye"></i>
+                <h3>Our Mission</h3>
+                <p>To protect students and job seekers from online recruitment fraud by providing a simple, fast, and reliable AI-based verification system.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-eye"></i>
+                <h3>Our Vision</h3>
+                <p>To create a safer digital recruitment environment where every student can confidently apply for genuine jobs and internships.</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-star"></i>
+                <h3>Key Features</h3>
+                <p>✔ ML &amp; NLP Scam Detection<br>✔ Multi-Factor Risk Analysis<br>✔ Recruiter Email Audit<br>✔ Dynamic Risk Visualizations</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-laptop-code"></i>
+                <h3>Technologies Used</h3>
+                <p>Python 3.10+<br>Flask Framework<br>Scikit-Learn &amp; NLTK<br>HTML5 / Vanilla CSS3 / JavaScript</p>
+            </div>
+
+            <div class="card">
+                <i class="fa-solid fa-user-graduate"></i>
+                <h3>Developer</h3>
+                <p><b>Darshan C</b><br>Master of Computer Applications (MCA)<br>CMR University</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="/detect" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Analyze Job Offer</a>
+            {% if logged_in %}
+            <a href="/dashboard" class="btn btn-secondary"><i class="fa-solid fa-house"></i> Back to Dashboard</a>
+            {% else %}
+            <a href="/" class="btn btn-secondary"><i class="fa-solid fa-house"></i> Back to Home</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+</body>
+</html>

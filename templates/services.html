@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld AI</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <section class="section">
+        <h1 class="title">Our Security Services</h1>
+
+        <div class="cards">
+            <div class="card">
+                <i class="fa-solid fa-brain"></i>
+                <h3>AI Job Scam Detection</h3>
+                <p>Analyze complete job postings using Machine Learning and NLP to detect fake recruiters and fraud tactics.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-envelope-circle-check"></i>
+                <h3>Recruiter Email Verification</h3>
+                <p>Verify if the email address sending job offers belongs to a legitimate corporate domain or free webmail service.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-chart-pie"></i>
+                <h3>Risk Analytics &amp; Breakdown</h3>
+                <p>Get multi-category risk scores across financial requests, communication channels, and salary promises.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <h3>Detection History</h3>
+                <p>Keep structured records of all your scanned job offers for easy future reference.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="/detect" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Try AI Detector Now</a>
+        </div>
+    </section>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+</body>
+</html>

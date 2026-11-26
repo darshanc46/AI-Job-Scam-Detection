@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Safety Dashboard | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gradient">
+
+    <nav class="navbar navbar-glass">
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld <span class="highlight">AI</span></a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard" class="active">Dashboard</a></li>
+            <li><a href="/detect">Detect Scam</a></li>
+            <li><a href="/history">History</a></li>
+            <li><a href="/profile">Profile</a></li>
+            {% if is_admin %}
+                <li><a href="/admin/users">Admin Panel</a></li>
+            {% endif %}
+            <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mt-4" style="max-width:1100px;">
+
+        <!-- WELCOME BANNER & CANDIDATE BADGE -->
+        <div class="glass-card mb-4 display-flex justify-between align-center flex-wrap gap-2">
+            <div>
+                <h2 style="color:var(--text);font-size:26px;font-weight:800;" class="mb-1">
+                    Welcome back{% if username %}, {{ username }}{% endif %} 👋
+                </h2>
+                <p class="text-muted text-sm">Your candidate AI security dashboard. Monitor risk telemetry, visual charts, and recent scans.</p>
+            </div>
+            <div class="badge-status badge-info">
+                🏅 {{ candidate_badge or 'Vigilant Candidate' }}
+            </div>
+        </div>
+
+        <!-- METRIC CARDS -->
+        <div class="dash-grid mb-4">
+            <div class="dash-metric glass-card">
+                <div class="metric-icon"><i class="fa-solid fa-magnifying-glass-chart text-primary"></i></div>
+                <div class="metric-value">{{ total }}</div>
+                <div class="metric-label">Total Scans</div>
+            </div>
+            <div class="dash-metric glass-card">
+                <div class="metric-icon"><i class="fa-solid fa-circle-check text-success"></i></div>
+                <div class="metric-value text-success">{{ safe_count }}</div>
+                <div class="metric-label">Legitimate Jobs</div>
+            </div>
+            <div class="dash-metric glass-card">
+                <div class="metric-icon"><i class="fa-solid fa-triangle-exclamation text-danger"></i></div>
+                <div class="metric-value text-danger">{{ scam_count }}</div>
+                <div class="metric-label">Scam Threats</div>
+            </div>
+            <div class="dash-metric glass-card">
+                <div class="metric-icon"><i class="fa-solid fa-shield-halved text-primary"></i></div>
+                <div class="metric-value">{{ safety_score }}%</div>
+                <div class="metric-label">Safety Index</div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC CHART.JS VISUAL ANALYTICS DASHBOARD -->
+        <div class="row mb-4">
+            <div class="col-6">
+                <div class="glass-card">
+                    <h3 class="mb-3">📊 Risk Distribution Ratio</h3>
+                    <div style="position:relative; height:260px;">
+                        <canvas id="riskDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="glass-card">
+                    <h3 class="mb-3">🏷️ Scam Category Breakdown</h3>
+                    <div style="position:relative; height:260px;">
+                        <canvas id="scamCategoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <h3 style="color:var(--text);font-size:18px;margin-bottom:16px;font-weight:700;">Quick Actions</h3>
+        <div class="dash-quick mb-4">
+            <a href="/detect" class="quick-card glass-card">
+                <i class="fa-solid fa-magnifying-glass text-primary"></i>
+                <h4>Detect Job Scam</h4>
+                <p>Upload PDF/DOCX or paste posting</p>
+            </a>
+            <a href="/history" class="quick-card glass-card">
+                <i class="fa-solid fa-clock-rotate-left text-primary"></i>
+                <h4>Scan History</h4>
+                <p>Search, filter & export scan reports</p>
+            </a>
+            <a href="/ai-system" class="quick-card glass-card">
+                <i class="fa-solid fa-brain text-primary"></i>
+                <h4>AI System Metrics</h4>
+                <p>View accuracy & confusion matrix</p>
+            </a>
+        </div>
+
+        <!-- RECENT SCAN HISTORY -->
+        <h3 style="color:var(--text);font-size:18px;margin-bottom:16px;font-weight:700;">Recent Candidate Scan Telemetry</h3>
+
+        {% if history %}
+        <div class="glass-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Company</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Risk %</th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>{{ item.date }}</td>
+                        <td style="font-weight:600;color:var(--text);">{{ item.company }}</td>
+                        <td>{{ item.role }}</td>
+                        <td>
+                            {% if item.prediction == "Scam" %}
+                                <span class="badge badge-danger"><i class="fa-solid fa-triangle-exclamation"></i> Scam</span>
+                            {% else %}
+                                <span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Safe</span>
+                            {% endif %}
+                        </td>
+                        <td style="font-weight:600;">{{ item.risk_score }}%</td>
+                        <td>
+                            <a href="/history/export_pdf/{{ item.id }}" class="btn btn-sm btn-outline" title="Download Forensic PDF">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="glass-card text-center p-4">
+            <i class="fa-solid fa-inbox text-muted mb-2" style="font-size:36px;"></i>
+            <p class="text-muted">No scans yet. Start by analyzing your first job posting!</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <footer class="mt-5">
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | MCA Capstone Project</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/dashboard_charts.js') }}"></script>
+    {% include 'chatbot.html' %}
+</body>
+</html>

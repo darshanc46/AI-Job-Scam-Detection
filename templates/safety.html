@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Safety Guide | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld AI</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="detect" style="max-width: 900px;">
+        <h2 style="text-align: center; color: var(--text);">🛡 Student Job Safety Guide</h2>
+        <p style="text-align: center; color: var(--text-muted);">Essential guidelines to avoid falling victim to recruitment scams</p>
+
+        <div class="tips" style="margin-top: 25px;">
+            <h3>🚨 5 Red Flags of Fake Job &amp; Internship Offers</h3>
+            <ul>
+                <li><i class="fa-solid fa-circle-exclamation scam"></i> <b>1. Money Demands:</b> Any request for registration fees, laptop security deposits, or training kit fees is 100% a scam.</li>
+                <li><i class="fa-solid fa-circle-exclamation scam"></i> <b>2. Chat-Only Hiring:</b> Recruiters who insist on interviewing solely via Telegram or WhatsApp without formal video/voice calls.</li>
+                <li><i class="fa-solid fa-circle-exclamation scam"></i> <b>3. Generic Email Domains:</b> Official corporate job offers coming from @gmail.com or @yahoo.com accounts.</li>
+                <li><i class="fa-solid fa-circle-exclamation scam"></i> <b>4. Unrealistic Pay:</b> Offers promising $500/day or $100/hr for simple typing or copy-paste tasks with zero experience.</li>
+                <li><i class="fa-solid fa-circle-exclamation scam"></i> <b>5. Instant Selection:</b> Job offers extended immediately without reviewing your resume or interviewing.</li>
+            </ul>
+        </div>
+
+        <div class="buttons" style="margin-top: 30px;">
+            <a href="/detect" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Analyze Job Offer Now</a>
+            {% if logged_in %}
+            <a href="/dashboard" class="btn btn-secondary"><i class="fa-solid fa-house"></i> Dashboard</a>
+            {% else %}
+            <a href="/" class="btn btn-secondary"><i class="fa-solid fa-house"></i> Home</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+</body>
+</html>

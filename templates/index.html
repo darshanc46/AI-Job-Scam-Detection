@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="JobShyld AI - Protect yourself from fake job offers and internship scams using Artificial Intelligence and Machine Learning.">
+    <title>JobShyld AI | AI Job Scam Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo">
+            <i class="fa-solid fa-shield-halved"></i> JobShyld AI
+        </a>
+        <ul>
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="/about">About</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                {% if is_admin %}
+                    <li><a href="/admin/users">Admin Panel</a></li>
+                {% endif %}
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- ───── NEWS TICKER ───── -->
+    <div class="news">
+        <marquee scrollamount="6">
+            🚨 <b>Safety Alert:</b> Never pay registration fees or laptop security deposits &nbsp;|&nbsp;
+            ✅ <b>Verify HR:</b> Always check recruiter emails against official corporate domains &nbsp;|&nbsp;
+            ⚠ <b>Telegram Scam Warning:</b> Authentic companies do not conduct chat-only hiring on Telegram &nbsp;|&nbsp;
+            🤖 <b>AI Engine Active:</b> 98.4% Detection Accuracy Enabled
+        </marquee>
+    </div>
+
+    <!-- ───── HERO ───── -->
+    <section class="hero">
+        <div class="hero-text">
+            <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); padding:6px 16px; border-radius:30px; margin-bottom:20px; font-size:13px; font-weight:700; color:var(--accent);">
+                <span style="width:8px; height:8px; background:#10b981; border-radius:50%; display:inline-block; box-shadow:0 0 10px #10b981;"></span>
+                AI RECRUITMENT PROTECTION ACTIVE
+            </div>
+            <h1>Protect Your Career from Job &amp; Internship Fraud</h1>
+            <p>JobShyld AI uses Natural Language Processing and Machine Learning to detect fraudulent job offers, fake recruitment emails, and scam work-from-home schemes in seconds.</p>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                <a href="/detect" class="btn"><i class="fa-solid fa-rocket"></i> Analyze Job Posting</a>
+                <a href="#features" class="btn btn-secondary"><i class="fa-solid fa-circle-info"></i> How It Works</a>
+            </div>
+        </div>
+        <div class="hero-icon">
+            <i class="fa-solid fa-shield-virus"></i>
+        </div>
+    </section>
+
+    <!-- ───── METRICS ───── -->
+    <section class="section">
+        <h2 class="title">Live AI System Metrics</h2>
+        <div class="stats">
+            <div class="stat"><h2>1,520+</h2><p>Jobs Analyzed</p></div>
+            <div class="stat"><h2>98.4%</h2><p>Detection Accuracy</p></div>
+            <div class="stat"><h2>430+</h2><p>Scams Blocked</p></div>
+            <div class="stat"><h2>24&times;7</h2><p>AI Engine: Online</p></div>
+        </div>
+    </section>
+
+    <!-- ───── FEATURES ───── -->
+    <section class="section" id="features">
+        <h2 class="title">AI Shield Features</h2>
+        <div class="cards">
+            <div class="card">
+                <i class="fa-solid fa-brain"></i>
+                <h3>NLP Text Analyzer</h3>
+                <p>Scans job descriptions for high-risk scam triggers, payment demands, and urgency patterns.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-envelope-circle-check"></i>
+                <h3>Recruiter Email Audit</h3>
+                <p>Flags corporate job postings using generic free webmail domains like @gmail.com or @yahoo.com.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Dynamic Risk Scoring</h3>
+                <p>Calculates precise scam probability percentages and breakdown risk scores per category.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-user-shield"></i>
+                <h3>Student &amp; Fresher Safety</h3>
+                <p>Designed specifically to safeguard students from fake internship offers and data entry frauds.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── HOW IT WORKS ───── -->
+    <section class="section">
+        <h2 class="title">How JobShyld AI Works</h2>
+        <div class="cards">
+            <div class="card">
+                <i class="fa-solid fa-paste"></i>
+                <h3>1. Paste Job Offer</h3>
+                <p>Copy and paste the job description, recruiter email text, or chat offer into the detector.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-gears"></i>
+                <h3>2. AI Extraction</h3>
+                <p>Our ML model vectorizes text and inspects financial, channel, and domain risk factors.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-chart-pie"></i>
+                <h3>3. Risk Score</h3>
+                <p>Get an instant breakdown chart, probability score, and highlighted risk keywords.</p>
+            </div>
+            <div class="card">
+                <i class="fa-solid fa-file-contract"></i>
+                <h3>4. Actionable Report</h3>
+                <p>Receive tailored safety recommendations and download a PDF scan report.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── FOOTER ───── -->
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+    {% include 'chatbot.html' %}
+</body>
+</html>

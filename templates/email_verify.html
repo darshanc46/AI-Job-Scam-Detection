@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav>
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld AI</a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/detect">Detect</a></li>
+            <li><a href="/history">History</a></li>
+            <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+            <li><a href="/detect">Detect</a></li>
+            <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+            <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="detect" style="max-width: 650px;">
+        <h2 style="text-align: center; color: var(--text);">Recruiter Email Domain Audit</h2>
+        <p style="text-align: center; color: var(--text-muted);">Enter recruiter email address to inspect domain
+            legitimacy</p>
+
+        <div style="margin-top: 20px;">
+            <input type="email" id="auditEmail" placeholder="e.g. hr@company.com or recruiter@gmail.com">
+            <button onclick="auditEmailDomain()" style="margin-top: 15px;">
+                <i class="fa-solid fa-envelope-circle-check"></i> Audit Email Domain
+            </button>
+        </div>
+
+        <div id="auditResult"
+            style="display: none; margin-top: 25px; padding: 20px; border-radius: 12px; background: var(--bg-deep); border: 1px solid var(--border);">
+        </div>
+    </div>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | Developed by <b>DARSHAN C</b></p>
+    </footer>
+
+    <script>
+        function auditEmailDomain() {
+            const email = document.getElementById("auditEmail").value.trim().toLowerCase();
+            const res = document.getElementById("auditResult");
+
+            if (!email || !email.includes("@")) {
+                alert("Please enter a valid email address!");
+                return;
+            }
+
+            const domain = email.split("@")[1];
+            const genericDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'aol.com'];
+
+            res.style.display = "block";
+            if (genericDomains.includes(domain)) {
+                res.innerHTML = `
+                    <h3 class="scam" style="margin-bottom:8px;"><i class="fa-solid fa-triangle-exclamation"></i> Suspicious Webmail Domain (@${domain})</h3>
+                    <p style="color: var(--text-body);">Recruiters offering corporate jobs from free personal webmail accounts (@${domain}) often indicate spoofed or fake recruitment scams!</p>
+                `;
+            } else {
+                res.innerHTML = `
+                    <h3 class="safe" style="margin-bottom:8px;"><i class="fa-solid fa-circle-check"></i> Corporate Domain (@${domain})</h3>
+                    <p style="color: var(--text-body);">The email domain @${domain} appears to be a dedicated web domain. Always verify the domain on official WHOIS / corporate registries.</p>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

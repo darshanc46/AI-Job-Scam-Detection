@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Environment variables / secrets
+.env
+*.env
+
+# Database
+instance/
+*.db
+*.sqlite3
+
+# Scratch / temp scripts
+scratch/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model files (large binaries – regenerate via train_model.py)
+# Uncomment the next two lines if you don't want to push the trained model:
+# model/model.pkl
+# model/vectorizer.pkl
+
+# Logs
+*.log
+
+# Jupyter Notebooks
+.ipynb_checkpoints/

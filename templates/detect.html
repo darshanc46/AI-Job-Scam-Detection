@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detect Job Scam | JobShyld AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient">
+
+    <!-- ───── NAVBAR ───── -->
+    <nav class="navbar navbar-glass">
+        <a href="/" class="logo"><i class="fa-solid fa-shield-halved"></i> JobShyld <span class="highlight">AI</span></a>
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if logged_in %}
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/detect" class="active">Detect</a></li>
+                <li><a href="/history">History</a></li>
+                {% if is_admin %}
+                    <li><a href="/admin/users">Admin Panel</a></li>
+                {% endif %}
+                <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+            {% else %}
+                <li><a href="/detect" class="active">Detect</a></li>
+                <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                <li><a href="/register" class="nav-btn nav-btn-primary">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="detect container mt-4">
+        <div class="top-btn">
+            {% if logged_in %}
+            <a href="/dashboard"><i class="fa-solid fa-house"></i> Dashboard</a>
+            <a href="/history"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+            {% else %}
+            <a href="/"><i class="fa-solid fa-house"></i> Home</a>
+            {% endif %}
+        </div>
+
+        <h2>🤖 AI Job &amp; Offer Letter Scam Detector</h2>
+        <p class="text-muted">Enter job posting details or upload a PDF offer letter / DOCX contract / Screenshot image. Our Hybrid AI engine will audit recruiter domain WHOIS age, financial indicators, and XAI feature weights.</p>
+
+        <!-- Viva One-Click Demo Sample Selector Buttons -->
+        <div class="demo-samples-bar mb-3">
+            <span class="demo-label"><i class="fa-solid fa-flask"></i> Viva Demo Quick Samples:</span>
+            <button type="button" id="btnLoadScam" class="btn btn-sm btn-danger"><i class="fa-solid fa-bug"></i> Load Sample Scam Posting</button>
+            <button type="button" id="btnLoadSafe" class="btn btn-sm btn-success"><i class="fa-solid fa-shield-check"></i> Load Authentic Job Offer</button>
+        </div>
+
+        <form action="/predict" method="POST" enctype="multipart/form-data" onsubmit="showLoader(this)" class="glass-card">
+            <div class="grid">
+                <input type="text" id="company_name" name="company_name" placeholder="Company Name (e.g. Google, TechCorp)">
+                <input type="email" id="recruiter_email" name="recruiter_email" placeholder="Recruiter Email (e.g. hr@company.com)">
+                <input type="text" id="job_role" name="job_role" placeholder="Job Role / Position (e.g. Software Engineer)">
+                <input type="text" id="location" name="location" placeholder="Location (e.g. Remote, Bangalore)">
+            </div>
+
+            <!-- Multi-Format Document File Upload Dropzone -->
+            <div class="file-upload-box mb-3">
+                <label for="document_file" class="file-dropzone-label">
+                    <i class="fa-solid fa-cloud-arrow-up text-primary" style="font-size: 2rem;"></i>
+                    <p class="mb-1"><strong>Upload Offer Letter / Employment Contract</strong></p>
+                    <p class="text-muted text-sm">Supports PDF (.pdf), Word (.docx), or Mobile Chat Screenshot (.png, .jpg)</p>
+                    <input type="file" id="document_file" name="document_file" accept=".pdf,.docx,.doc,.png,.jpg,.jpeg,.bmp,.webp" class="file-input-hidden">
+                </label>
+                <div id="file_name_display" class="file-name-display mt-2"></div>
+            </div>
+
+            <textarea id="job_description" name="job_description" placeholder="Or paste complete Job Description, email message, or chat transcript here..." rows="6"></textarea>
+
+            <div class="buttons mt-3">
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-magnifying-glass"></i> Analyze with Hybrid AI Engine
+                </button>
+                <button type="reset" class="btn btn-secondary">
+                    <i class="fa-solid fa-rotate-left"></i> Clear Fields
+                </button>
+            </div>
+
+            <div class="loader" id="loader">
+                <i class="fa-solid fa-spinner fa-spin"></i> Hybrid AI Engine is extracting document text, querying domain WHOIS age, and calculating XAI feature weights...
+            </div>
+        </form>
+
+        <div class="tips glass-card mt-4">
+            <h3>💡 AI Security Verification Protocol</h3>
+            <ul>
+                <li><i class="fa-solid fa-circle-exclamation scam"></i> Never pay registration, application, laptop deposit, or training fees.</li>
+                <li><i class="fa-solid fa-circle-exclamation scam"></i> Beware of interviews conducted exclusively on Telegram, WhatsApp, or Signal.</li>
+                <li><i class="fa-solid fa-circle-check safe"></i> Verify that recruiter email addresses match official corporate domain names.</li>
+                <li><i class="fa-solid fa-circle-check safe"></i> Be suspicious of high compensation offers ($50+/hr) with "no experience required".</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <h3><i class="fa-solid fa-shield-halved"></i> JobShyld AI</h3>
+        <p>AI Powered Job &amp; Internship Scam Detection Platform</p>
+        <hr>
+        <p>&copy; 2026 JobShyld AI | MCA Capstone Project</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/detect_upload.js') }}"></script>
+    <script>
+        function showLoader(form){
+            const desc = document.getElementById("job_description").value;
+            const file = document.getElementById("document_file").files;
+            if (!desc.trim() && file.length === 0) {
+                alert("Please enter text or select a document file to analyze!");
+                return false;
+            }
+
+            const btn = document.getElementById("submitBtn");
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = "0.7";
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing Security Risk...';
+            }
+            document.getElementById("loader").style.display = "block";
+            return true;
+        }
+    </script>
+    {% include 'chatbot.html' %}
+</body>
+</html>
